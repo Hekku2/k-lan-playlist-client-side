@@ -10,7 +10,6 @@ bower install
 
 ## Developing
 
-
-
 ### Tools
 
+See tools from [k-lan-playlist-server](https://github.com/Hekku2/k-lan-playlist-server)
