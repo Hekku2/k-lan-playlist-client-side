@@ -2,7 +2,8 @@ var clientSide = angular.module('clientSideLanPlayer', [
     'ngRoute',
     'userControllers',
     'statusControllers',
-    'mainControllers'
+    'mainControllers',
+    'userServices'
 ]);
 
 clientSide.config(['$routeProvider', '$locationProvider',

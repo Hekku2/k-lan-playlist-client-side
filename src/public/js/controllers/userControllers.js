@@ -1,22 +1,28 @@
 var userControllers = angular.module('userControllers', ['clientSideLanPlayer.config']);
 
-userControllers.controller('UserListCtrl', ['$scope', '$http', 'appConfig',
-    function ($scope, $http, appConfig) {
+userControllers.controller('UserListCtrl', ['$scope', '$http', 'appConfig', 'UserService',
+    function ($scope, $http, appConfig, UserService) {
         $scope.users = [];
 
         $http.get(appConfig.services.UserService + 'users').success(function(data) {
+
+            data.forEach(function(element){
+                element.rolename = UserService.getRoleName(element.role)
+            });
+
             $scope.users = data;
         });
     }
 ]);
 
-userControllers.controller('UserDetailsCtrl', ['$scope', '$http', '$route', '$routeParams', 'appConfig',
-    function ($scope, $http, $route, $routeParams, appConfig) {
+userControllers.controller('UserDetailsCtrl', ['$scope', '$http', '$route', '$routeParams', 'appConfig', 'UserService',
+    function ($scope, $http, $route, $routeParams, appConfig, UserService) {
         $scope.user = {};
         $scope.$on('$routeChangeSuccess', function() {
             $http.get(appConfig.services.UserService + 'user/' + $routeParams.userId).error(function(err){
                 $scope.user = {};
             }).success(function(data) {
+                data.rolename = UserService.getRoleName(data.role);
                 $scope.user = data;
             });
         });

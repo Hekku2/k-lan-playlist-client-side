@@ -9,7 +9,8 @@ describe('userControllers', function() {
     var userCreator = function(id){
         return {
             id: id,
-            username: 'test' + id
+            username: 'test' + id,
+            role: 3
         };
     };
 
@@ -22,8 +23,11 @@ describe('userControllers', function() {
     describe('UserListCtrl', function(){
         beforeEach(inject(function($injector) {
             var $controller = $injector.get('$controller');
+            var userService= {
+                getRoleName: function(roleId){return 'admin';}
+            };
             createController = function() {
-                return $controller('UserListCtrl', {'$scope' : $rootScope });
+                return $controller('UserListCtrl', {'$scope' : $rootScope, 'UserService' : userService });
             };
         }));
 
@@ -35,8 +39,18 @@ describe('userControllers', function() {
             createController();
             $httpBackend.flush();
             expect($rootScope.users).toEqual([
-                userCreator(1),
-                userCreator(2)
+                {
+                    id: 1,
+                    username: 'test1',
+                    role: 3,
+                    rolename: 'admin'
+                },
+                {
+                    id: 2,
+                    username: 'test2',
+                    role: 3,
+                    rolename: 'admin'
+                }
             ]);
         });
     });
@@ -46,8 +60,15 @@ describe('userControllers', function() {
             var $controller = $injector.get('$controller');
             var $route = {};
             var $routeParams = {userId:666};
+            var userService= {
+                getRoleName: function(roleId){return 'admin';}
+            };
             createController = function() {
-                return $controller('UserDetailsCtrl', {'$scope' : $rootScope, '$route': $route, '$routeParams' : $routeParams});
+                return $controller('UserDetailsCtrl', {
+                    '$scope' : $rootScope,
+                    '$route': $route,
+                    '$routeParams' : $routeParams,
+                    'UserService' : userService});
             };
         }));
 
@@ -60,6 +81,8 @@ describe('userControllers', function() {
             var testuser = userCreator(expectedUserId);
             expect($rootScope.user.id).toEqual(testuser.id);
             expect($rootScope.user.username).toEqual(testuser.username);
+            expect($rootScope.user.role).toEqual(testuser.role);
+            expect($rootScope.user.rolename).toEqual('admin');
         });
     });
 });

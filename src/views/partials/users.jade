@@ -6,11 +6,13 @@ include ./mixins.jade
             tr
                 th Id
                 th User
+                th Role
                 th
         tbody
             tr(ng-repeat="user in users")
                 td {{user.id}}
                 td {{user.username}}
+                td {{user.rolename}}
                 td.col-md-1
                     a.btn.btn-default.btn-block(ng-href="/user/{{user.id}}")
                         span.glyphicon.glyphicon-menu-right
