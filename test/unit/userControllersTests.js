@@ -1,6 +1,8 @@
 describe('userControllers', function() {
     beforeEach(module('userControllers'));
 
+    var userId = 666;
+
     var $httpBackend;
     var $rootScope;
     var createController;
@@ -59,7 +61,7 @@ describe('userControllers', function() {
         beforeEach(inject(function($injector) {
             var $controller = $injector.get('$controller');
             var $route = {};
-            var $routeParams = {userId:666};
+            var $routeParams = {userId:userId};
             var userService= {
                 getRoleName: function(roleId){return 'admin';}
             };
@@ -72,7 +74,7 @@ describe('userControllers', function() {
             };
         }));
 
-        it('user retrieves correct user', function() {
+        it('correct user is retrieved', function() {
             var expectedUserId = 666;
             $httpBackend.expectGET(appConfig.services.UserService + 'user/' + expectedUserId).respond(200, userCreator(expectedUserId));
             createController();
@@ -83,6 +85,54 @@ describe('userControllers', function() {
             expect($rootScope.user.username).toEqual(testuser.username);
             expect($rootScope.user.role).toEqual(testuser.role);
             expect($rootScope.user.rolename).toEqual('admin');
+        });
+    });
+
+    describe('UserEditCtrl', function(){
+        beforeEach(inject(function($injector) {
+            var $controller = $injector.get('$controller');
+            var $route = {};
+            var $routeParams = {userId:userId};
+            var $location = {
+                path: function(){}
+            };
+            var userService= {
+                getRoleName: function(roleId){return 'admin';}
+            };
+            createController = function() {
+                return $controller('UserEditCtrl', {
+                    '$scope' : $rootScope,
+                    '$route': $route,
+                    '$routeParams' : $routeParams,
+                    '$location' : $location,
+                    'UserService' : userService});
+            };
+        }));
+
+        it('correct user is retrieved', function(){
+            $httpBackend.expectGET(appConfig.services.UserService + 'user/' + userId).respond(200, userCreator(userId));
+            createController();
+            $rootScope.$broadcast('$routeChangeSuccess', {});
+            $httpBackend.flush();
+            var testuser = userCreator(userId);
+            expect($rootScope.user.id).toEqual(testuser.id);
+            expect($rootScope.user.username).toEqual(testuser.username);
+            expect($rootScope.user.role).toEqual(testuser.role);
+            expect($rootScope.user.rolename).toEqual('admin');
+        });
+
+        it('user is updated', function(){
+            createController();
+
+            $rootScope.user = {
+                id: 1,
+                username: 'test1',
+                role: 2
+            };
+            $rootScope.save();
+
+            $httpBackend.expectPOST(appConfig.services.UserService + 'user/' + userId).respond(200);
+            $httpBackend.flush();
         });
     });
 });
