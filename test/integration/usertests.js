@@ -2,15 +2,6 @@ var dbTools = require('../test-db-tools');
 var userListPages = require('./pages/userListPage');
 
 describe("User tests", function() {
-
-    function rowSelect(row){
-        return by.css('tbody tr:nth-child(' + row + ')');
-    }
-
-    function nameSelect(){
-        return by.css('td:nth-child(2)');
-    }
-
     beforeEach(function() {
         dbTools.initializeTestData();
     });
