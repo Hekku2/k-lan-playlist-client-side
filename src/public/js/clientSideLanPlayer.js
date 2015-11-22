@@ -15,8 +15,12 @@ clientSide.config(['$routeProvider', '$locationProvider',
                 controller: "UserListCtrl"
             }).
             when('/user/:userId', {
-            templateUrl: "partials/user.jade",
-            controller: "UserDetailsCtrl"
+                templateUrl: "partials/user.jade",
+                controller: "UserDetailsCtrl"
+            }).
+            when('/userEdit/:userId', {
+                templateUrl: "partials/userEdit.jade",
+                controller: "UserEditCtrl"
             }).
             when("/status", {
                 templateUrl: "partials/status.jade",

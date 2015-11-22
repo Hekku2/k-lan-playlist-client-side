@@ -1,0 +1,18 @@
+include ./mixins.jade
++navigation('Users')
+#container
+    form.form-horizontal
+        div.form-group
+            label.control-label.col-sm-2 ID
+            div.col-sm-10
+                p.form-control-static {{user.id}}
+        div.form-group
+            label.control-label.col-sm-2 User
+            div.col-sm-10
+                input.form-control(ng-model="user.username")
+        div.form-group
+            label.control-label.col-sm-2 Role
+            div.col-sm-10
+                input.form-control(ng-model="user.role")
+        a.btn.btn-default(ng-href="/user/{{user.id}}") Cancel
+        button.btn.btn-primary(type="submit", ng-click="save()") Save

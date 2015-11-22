@@ -28,3 +28,26 @@ userControllers.controller('UserDetailsCtrl', ['$scope', '$http', '$route', '$ro
         });
     }
 ]);
+
+userControllers.controller('UserEditCtrl', ['$scope', '$http', '$route', '$routeParams', '$location', 'appConfig', 'UserService',
+    function ($scope, $http, $route, $routeParams, $location, appConfig, UserService) {
+        $scope.user = {};
+        $scope.$on('$routeChangeSuccess', function() {
+            $http.get(appConfig.services.UserService + 'user/' + $routeParams.userId).error(function(err){
+                $scope.user = {};
+            }).success(function(data) {
+                data.rolename = UserService.getRoleName(data.role);
+                $scope.user = data;
+            });
+        });
+
+        $scope.save = function(){
+            $http.post(appConfig.services.UserService + 'user/' + $routeParams.userId, $scope.user).error(function(err){
+                //TODO Show error
+            }).success(function(){
+                //Show success
+                $location.path('/user/' + $scope.user.id);
+            });
+        };
+    }
+]);
